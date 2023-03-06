@@ -1,1 +1,1 @@
-DROP TABLE IF EXISTS otamaq.dishes;
+DROP TABLE IF EXISTS dishes;

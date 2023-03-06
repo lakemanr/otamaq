@@ -1,2 +1,2 @@
-DROP TABLE IF EXISTS otamaq.dish_tags;
-DROP TYPE IF EXISTS otamaq.dish_tag;
+DROP TABLE IF EXISTS dish_tags;
+DROP TYPE IF EXISTS dish_tag;

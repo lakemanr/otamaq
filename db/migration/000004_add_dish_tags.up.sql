@@ -1,4 +1,4 @@
-CREATE TYPE otamaq.dish_tag AS ENUM (
+CREATE TYPE dish_etag AS ENUM (
   'burgers',
   'sushi',
   'pizza',
@@ -6,10 +6,10 @@ CREATE TYPE otamaq.dish_tag AS ENUM (
   'fast_food'
 );
 
-CREATE TABLE otamaq.dish_tags (
+CREATE TABLE dish_tags (
   id serial PRIMARY KEY,
-  dish_id int,
-  tag otamaq.dish_tag
+  dish_id int NOT NULL,
+  tag dish_etag NOT NULL
 );
 
-ALTER TABLE otamaq.dish_tags ADD FOREIGN KEY (dish_id) REFERENCES otamaq.dishes (id);
+ALTER TABLE dish_tags ADD FOREIGN KEY (dish_id) REFERENCES dishes (id);
