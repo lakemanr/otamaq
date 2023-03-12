@@ -13,4 +13,7 @@ migrateup1:
 migratedown1:
 	migrate -path db/migration -database "postgres://root:secret@localhost:5432/otamaq?sslmode=disable" -verbose down 1
 
-.PHONY: postgres createdb dropdb migrateup1 migratedown1
+test:
+	go test --cover ./...
+
+.PHONY: postgres createdb dropdb migrateup1 migratedown1 test
