@@ -30,10 +30,26 @@ func randStirng(leanght int) string {
 
 }
 
+func randInt32(min, max int32) int32 {
+	return min + utilRand.Int31n(max-min+1)
+}
+
 func RandomRestaurantName() string {
 	return "restaurant " + randStirng(10)
 }
 
 func RandomDishName() string {
 	return "dish " + randStirng(10)
+}
+
+func RandomClientName() string {
+	return "client full name " + randStirng(10)
+}
+
+func RandomClientLogin() string {
+	return "client login " + randStirng(10)
+}
+
+func RandomQuantity() int32 {
+	return randInt32(1, 10)
 }
