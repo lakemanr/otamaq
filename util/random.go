@@ -53,3 +53,11 @@ func RandomClientLogin() string {
 func RandomQuantity() int32 {
 	return randInt32(1, 10)
 }
+
+func RandomOrderSize() int {
+	return 1 + utilRand.Intn(10)
+}
+
+func RandomNumOrders() int {
+	return 10 + utilRand.Intn(20)
+}
