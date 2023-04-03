@@ -3,6 +3,8 @@ docker pull postgres:15-alpine
 docker start postgres15
 // find out postgres15's ip that is used in the unit tests
 docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' postgres15
+// psql console
+docker exec -it postgres15 psql -U root -d otamaq
 
 // golang-migrate
 // https://github.com/golang-migrate/migrate
