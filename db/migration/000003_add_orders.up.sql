@@ -9,7 +9,7 @@ CREATE TABLE order_items (
   id serial PRIMARY KEY,
   order_id int NOT NULL,
   dish_id int NOT NULL,
-  quantity int NOT NULL DEFAULT 1
+  quantity int NOT NULL DEFAULT 1 CHECK (quantity > 0)
 );
 
 ALTER TABLE orders ADD FOREIGN KEY (client_id) REFERENCES clients (id);

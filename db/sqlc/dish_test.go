@@ -2,6 +2,7 @@ package db
 
 import (
 	"context"
+	"math"
 	"testing"
 
 	"github.com/lakemanr/otamaq/util"
@@ -28,7 +29,67 @@ func createRandomDish(t *testing.T, rest Restaurant) Dish {
 	return dish
 }
 
+func addRandomDishAmount(t *testing.T, dishBefore Dish, amount int32) Dish {
+
+	qtyBefore := dishBefore.Quantity
+
+	arg := AddDishAmountParams{
+		Amount: amount,
+		ID:     dishBefore.ID,
+	}
+
+	dish, err := testQueries.AddDishAmount(context.Background(), arg)
+	require.NoError(t, err)
+	require.NotEmpty(t, dish)
+
+	assert.Equal(t, dishBefore.ID, dish.ID)
+	assert.Equal(t, dishBefore.Name, dish.Name)
+	assert.Equal(t, dishBefore.RestID, dish.RestID)
+	assert.Equal(t, dishBefore.CreatedAt, dish.CreatedAt)
+
+	assert.Equal(t, dish.Quantity, qtyBefore+amount)
+
+	return dish
+}
+
+func makeUnlimitedDishAmount(t *testing.T, dishBefore Dish) Dish {
+	unlimited := math.MaxInt32 - dishBefore.Quantity
+	return addRandomDishAmount(t, dishBefore, unlimited)
+}
+
 func TestCreateDish(t *testing.T) {
 	rest := createRandomRestaurant(t)
 	createRandomDish(t, rest)
+}
+
+func TestAddDishAmmount(t *testing.T) {
+	rest := createRandomRestaurant(t)
+	dishBefore := createRandomDish(t, rest)
+	dish := addRandomDishAmount(t, dishBefore, util.RandomQuantity())
+
+	invalidAmount := -(dish.Quantity + util.RandomQuantity())
+
+	arg := AddDishAmountParams{
+		Amount: invalidAmount,
+		ID:     dishBefore.ID,
+	}
+
+	dish, err := testQueries.AddDishAmount(context.Background(), arg)
+	require.Error(t, err)
+	require.Empty(t, dish)
+}
+
+func TestGetDish(t *testing.T) {
+	rest := createRandomRestaurant(t)
+	dishBefore := createRandomDish(t, rest)
+
+	dish, err := testQueries.GetDish(context.Background(), dishBefore.ID)
+	require.NoError(t, err)
+	require.NotEmpty(t, dish)
+
+	assert.Equal(t, dishBefore.ID, dish.ID)
+	assert.Equal(t, dishBefore.Name, dish.Name)
+	assert.Equal(t, dishBefore.RestID, dish.RestID)
+	assert.Equal(t, dishBefore.CreatedAt, dish.CreatedAt)
+	assert.Equal(t, dishBefore.Quantity, dish.Quantity)
 }

@@ -9,13 +9,38 @@ import (
 	"context"
 )
 
+const addDishAmount = `-- name: AddDishAmount :one
+UPDATE dishes 
+SET quantity = quantity + $1 
+WHERE id = $2 
+RETURNING id, name, rest_id, quantity, created_at
+`
+
+type AddDishAmountParams struct {
+	Amount int32 `json:"amount"`
+	ID     int32 `json:"id"`
+}
+
+func (q *Queries) AddDishAmount(ctx context.Context, arg AddDishAmountParams) (Dish, error) {
+	row := q.db.QueryRowContext(ctx, addDishAmount, arg.Amount, arg.ID)
+	var i Dish
+	err := row.Scan(
+		&i.ID,
+		&i.Name,
+		&i.RestID,
+		&i.Quantity,
+		&i.CreatedAt,
+	)
+	return i, err
+}
+
 const createDish = `-- name: CreateDish :one
 INSERT INTO dishes (
     name, 
     rest_id
 ) VALUES (
     $1, $2
-) RETURNING id, name, rest_id, created_at
+) RETURNING id, name, rest_id, quantity, created_at
 `
 
 type CreateDishParams struct {
@@ -30,6 +55,24 @@ func (q *Queries) CreateDish(ctx context.Context, arg CreateDishParams) (Dish, e
 		&i.ID,
 		&i.Name,
 		&i.RestID,
+		&i.Quantity,
+		&i.CreatedAt,
+	)
+	return i, err
+}
+
+const getDish = `-- name: GetDish :one
+SELECT id, name, rest_id, quantity, created_at FROM dishes WHERE id = $1
+`
+
+func (q *Queries) GetDish(ctx context.Context, id int32) (Dish, error) {
+	row := q.db.QueryRowContext(ctx, getDish, id)
+	var i Dish
+	err := row.Scan(
+		&i.ID,
+		&i.Name,
+		&i.RestID,
+		&i.Quantity,
 		&i.CreatedAt,
 	)
 	return i, err

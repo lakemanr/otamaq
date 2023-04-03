@@ -66,6 +66,7 @@ type Dish struct {
 	ID        int32     `json:"id"`
 	Name      string    `json:"name"`
 	RestID    int32     `json:"rest_id"`
+	Quantity  int32     `json:"quantity"`
 	CreatedAt time.Time `json:"created_at"`
 }
 
