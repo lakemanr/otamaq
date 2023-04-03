@@ -1,2 +1,2 @@
 DROP TABLE IF EXISTS dish_tags;
-DROP TYPE IF EXISTS dish_tag;
+DROP TYPE IF EXISTS dish_etag;
