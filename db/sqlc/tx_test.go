@@ -11,10 +11,10 @@ import (
 
 func createRandomOrderTx(t *testing.T, client Client, rest Restaurant, dishes []Dish) (OrderTxResult, error) {
 
-	dishIDsQty := make(map[int32]int32)
+	dishIDsQty := make([]DishQty, len(dishes))
 
-	for _, dish := range dishes {
-		dishIDsQty[dish.ID] = util.RandomQuantity()
+	for i, dish := range dishes {
+		dishIDsQty[i] = DishQty{dish.ID, util.RandomQuantity()}
 	}
 
 	arg := CreateOrderTxParams{
@@ -39,6 +39,8 @@ func TestCreateOrderTx(t *testing.T) {
 
 	for i := 0; i < orderSize; i++ {
 		dish := createRandomDish(t, rest)
+		dish = makeUnlimitedDishAmount(t, dish)
+
 		dishes[i] = dish
 		dishIDs[i] = dish.ID
 	}
@@ -55,6 +57,8 @@ func TestCreateOrderTx(t *testing.T) {
 			orders <- order
 		}()
 	}
+
+	actualAmmounts := make(map[int32]int32)
 
 	for i := 0; i < numOrders; i++ {
 		err := <-errs
@@ -76,7 +80,16 @@ func TestCreateOrderTx(t *testing.T) {
 			assert.Equal(t, order.Order.ID, orderItem.OrderID)
 			assert.NotZero(t, orderItem.Quantity)
 			assert.Contains(t, dishIDs, orderItem.DishID)
+
+			actualAmmounts[orderItem.DishID] += orderItem.Quantity
 		}
+	}
+
+	for _, dish := range dishes {
+		actualDish, err := testQueries.GetDish(context.Background(), dish.ID)
+		require.NoError(t, err)
+
+		assert.Equal(t, dish.Quantity-actualAmmounts[dish.ID], actualDish.Quantity)
 	}
 
 }
