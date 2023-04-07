@@ -9,12 +9,38 @@ jobs:
   test:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
+    # Services containers to run with `test` job
+    services:
+      # Label used to access the service container
+      postgres15:
+        # Docker Hub image
+        image: postgres:15-alpine
+        # Environment variables to pass to the container
+        env:
+          POSTGRES_USER: root
+          POSTGRES_PASSWORD: secret
+          POSTGRES_DB: otamaq
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          # Maps tcp port 5432 on service container to the host
+          - 5432:5432
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
     - name: Set up Go
       uses: actions/setup-go@v3
       with:
         go-version: 1.19
+
+    - name: Migration
+      run: | 
+        curl -L https://github.com/golang-migrate/migrate/releases/download/4.5.12/migrate.linux-amd64.tar.gz | tar xvz
+        sudo mv migrate.linux-amd64 /usr/local/bin/migrate
+        make migrateup
 
     - name: Checkout code
       uses: actions/checkout@v3

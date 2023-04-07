@@ -10,6 +10,9 @@ createdb:
 dropdb:
 	docker exec -it postgres15 dropdb otamaq
 
+migrateup:
+	migrate -path db/migration -database "postgres://root:secret@localhost:5432/otamaq?sslmode=disable" -verbose up
+
 migrateup1:
 	migrate -path db/migration -database "postgres://root:secret@localhost:5432/otamaq?sslmode=disable" -verbose up 1
 
