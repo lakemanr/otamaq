@@ -22,4 +22,4 @@ migratedown1:
 test:
 	go test -v --cover ./...
 
-.PHONY: run_postgres start_postgres createdb dropdb migrateup1 migratedown1 test
+.PHONY: run_postgres start_postgres createdb dropdb migrateup migrateup1 migratedown1 test
