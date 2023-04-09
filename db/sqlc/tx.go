@@ -53,7 +53,7 @@ func CreateOrderTx(db *sql.DB, ctx context.Context, arg CreateOrderTxParams) (Or
 		var err error
 
 		// Create an order.
-		result.Order, err = q.CreateOrder(ctx, CreateOrderParams{
+		result.Order, err = q.createOrder(ctx, createOrderParams{
 			ClientID: arg.ClientID,
 			RestID:   arg.RestID,
 		})
@@ -77,7 +77,7 @@ func CreateOrderTx(db *sql.DB, ctx context.Context, arg CreateOrderTxParams) (Or
 		// Create order items.
 		var orderItem OrderItem
 		for _, dishQty := range arg.DishIDsQty {
-			orderItem, err = q.CreateOrderItem(ctx, CreateOrderItemParams{
+			orderItem, err = q.createOrderItem(ctx, createOrderItemParams{
 				OrderID:  result.Order.ID,
 				DishID:   dishQty.DishID,
 				Quantity: dishQty.Quantity,

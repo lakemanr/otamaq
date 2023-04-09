@@ -1,4 +1,4 @@
--- name: CreateOrder :one
+-- name: createOrder :one
 INSERT INTO orders (
     client_id,
     rest_id
@@ -6,7 +6,7 @@ INSERT INTO orders (
     $1, $2
 ) RETURNING *;
 
--- name: CreateOrderItem :one
+-- name: createOrderItem :one
 INSERT INTO order_items (
     order_id,
     dish_id,
