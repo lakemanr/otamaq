@@ -5,22 +5,24 @@ import (
 	"log"
 
 	"github.com/lakemanr/otamaq/api"
+	"github.com/lakemanr/otamaq/util"
 	_ "github.com/lib/pq"
-)
-
-const (
-	dbDriver = "postgres"
-	dbSource = "postgres://root:secret@localhost:5432/otamaq?sslmode=disable"
 )
 
 func main() {
 
-	conn, err := sql.Open(dbDriver, dbSource)
+	congig, err := util.LoadConfig(".")
+
+	if err != nil {
+		log.Fatal("Cannot load config:", err)
+	}
+
+	conn, err := sql.Open(congig.DbDriver, congig.DbSource)
 
 	if err != nil {
 		log.Fatal("Cannot connect to db:", err)
 	}
 
 	s := api.NewServer(conn)
-	s.Start("localhost:8080")
+	s.Start(congig.ServerAddress)
 }
