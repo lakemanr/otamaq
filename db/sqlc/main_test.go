@@ -10,7 +10,7 @@ import (
 	_ "github.com/lib/pq"
 )
 
-var testStore *Store
+var testStore Store
 
 func TestMain(m *testing.M) {
 

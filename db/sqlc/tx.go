@@ -7,20 +7,28 @@ import (
 	"sort"
 )
 
-type Store struct {
+// Sore is the interface for the database.
+type Store interface {
+	Querier
+	CreateOrderTx(ctx context.Context, arg CreateOrderTxParams) (OrderTxResult, error)
+}
+
+// SQLStore is a wrapper around sql.DB that implements Store.
+type SQLStore struct {
 	*Queries
 	db *sql.DB
 }
 
-func NewStore(db *sql.DB) *Store {
-	return &Store{
+// NewStore creates a new store.
+func NewStore(db *sql.DB) Store {
+	return &SQLStore{
 		db:      db,
 		Queries: New(db),
 	}
 }
 
-// execTx executes a function within a database transaction.
-func (store *Store) execTx(ctx context.Context, fn func(*Queries) error) error {
+// execTx executes a function within a database transaction
+func (store *SQLStore) execTx(ctx context.Context, fn func(*Queries) error) error {
 	tx, err := store.db.BeginTx(ctx, nil)
 	if err != nil {
 		return err
@@ -59,7 +67,7 @@ type OrderTxResult struct {
 }
 
 // CreateOrderTx creates an order and order items in a single database transaction.
-func (store *Store) CreateOrderTx(ctx context.Context, arg CreateOrderTxParams) (OrderTxResult, error) {
+func (store *SQLStore) CreateOrderTx(ctx context.Context, arg CreateOrderTxParams) (OrderTxResult, error) {
 	var result OrderTxResult
 
 	err := store.execTx(ctx, func(q *Queries) error {
