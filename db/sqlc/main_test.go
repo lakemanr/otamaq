@@ -10,8 +10,7 @@ import (
 	_ "github.com/lib/pq"
 )
 
-var testQueries *Queries
-var testDb *sql.DB
+var testStore *Store
 
 func TestMain(m *testing.M) {
 
@@ -21,13 +20,13 @@ func TestMain(m *testing.M) {
 		log.Fatal("Cannot Load congig:", err)
 	}
 
-	testDb, err = sql.Open(config.DbDriver, config.DbSource)
+	testDb, err := sql.Open(config.DbDriver, config.DbSource)
 
 	if err != nil {
 		log.Fatal("Cannot connect to db:", err)
 	}
 
-	testQueries = New(testDb)
+	testStore = NewStore(testDb)
 
 	os.Exit(m.Run())
 }

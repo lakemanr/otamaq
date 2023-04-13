@@ -15,7 +15,7 @@ func createRandomDish(t *testing.T, rest Restaurant) Dish {
 		Name:   util.RandomDishName(),
 		RestID: rest.ID,
 	}
-	dish, err := testQueries.CreateDish(context.Background(), arg)
+	dish, err := testStore.CreateDish(context.Background(), arg)
 
 	require.NoError(t, err)
 	require.NotEmpty(t, dish)
@@ -38,7 +38,7 @@ func addRandomDishAmount(t *testing.T, dishBefore Dish, amount int32) Dish {
 		ID:     dishBefore.ID,
 	}
 
-	dish, err := testQueries.AddDishAmount(context.Background(), arg)
+	dish, err := testStore.AddDishAmount(context.Background(), arg)
 	require.NoError(t, err)
 	require.NotEmpty(t, dish)
 
@@ -74,7 +74,7 @@ func TestAddDishAmmount(t *testing.T) {
 		ID:     dishBefore.ID,
 	}
 
-	dish, err := testQueries.AddDishAmount(context.Background(), arg)
+	dish, err := testStore.AddDishAmount(context.Background(), arg)
 	require.Error(t, err)
 	require.Empty(t, dish)
 }
@@ -83,7 +83,7 @@ func TestGetDish(t *testing.T) {
 	rest := createRandomRestaurant(t)
 	dishBefore := createRandomDish(t, rest)
 
-	dish, err := testQueries.GetDish(context.Background(), dishBefore.ID)
+	dish, err := testStore.GetDish(context.Background(), dishBefore.ID)
 	require.NoError(t, err)
 	require.NotEmpty(t, dish)
 

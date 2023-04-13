@@ -11,7 +11,7 @@ import (
 
 func createRandomRestaurant(t *testing.T) Restaurant {
 	arg := util.RandomRestaurantName()
-	rest, err := testQueries.CreateRestaurant(context.Background(), arg)
+	rest, err := testStore.CreateRestaurant(context.Background(), arg)
 
 	require.NoError(t, err)
 	require.NotEmpty(t, rest)

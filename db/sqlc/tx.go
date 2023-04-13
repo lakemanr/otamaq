@@ -7,14 +7,27 @@ import (
 	"sort"
 )
 
+type Store struct {
+	*Queries
+	db *sql.DB
+}
+
+func NewStore(db *sql.DB) *Store {
+	return &Store{
+		db:      db,
+		Queries: New(db),
+	}
+}
+
 // execTx executes a function within a database transaction.
-func execTx(db *sql.DB, ctx context.Context, fn func(*Queries) error) error {
-	tx, err := db.BeginTx(ctx, nil)
+func (store *Store) execTx(ctx context.Context, fn func(*Queries) error) error {
+	tx, err := store.db.BeginTx(ctx, nil)
 	if err != nil {
 		return err
 	}
 
-	q := New(tx)
+	q := store.WithTx(tx)
+
 	err = fn(q)
 	if err != nil {
 		if rbErr := tx.Rollback(); rbErr != nil {
@@ -46,10 +59,10 @@ type OrderTxResult struct {
 }
 
 // CreateOrderTx creates an order and order items in a single database transaction.
-func CreateOrderTx(db *sql.DB, ctx context.Context, arg CreateOrderTxParams) (OrderTxResult, error) {
+func (store *Store) CreateOrderTx(ctx context.Context, arg CreateOrderTxParams) (OrderTxResult, error) {
 	var result OrderTxResult
 
-	err := execTx(db, ctx, func(q *Queries) error {
+	err := store.execTx(ctx, func(q *Queries) error {
 		var err error
 
 		// Create an order.

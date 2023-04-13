@@ -15,7 +15,7 @@ func createRandomClient(t *testing.T) Client {
 		Login:    util.RandomClientLogin(),
 	}
 
-	client, err := testQueries.CreateClient(context.Background(), arg)
+	client, err := testStore.CreateClient(context.Background(), arg)
 
 	require.NoError(t, err)
 	require.NotEmpty(t, client)

@@ -15,7 +15,7 @@ func createRandomOrder(t *testing.T, client Client, rest Restaurant) Order {
 		RestID:   rest.ID,
 	}
 
-	order, err := testQueries.createOrder(context.Background(), arg)
+	order, err := testStore.createOrder(context.Background(), arg)
 
 	require.NoError(t, err)
 	require.NotEmpty(t, order)
@@ -36,7 +36,7 @@ func createRandomOrderItem(t *testing.T, order Order, dish Dish) OrderItem {
 		Quantity: util.RandomQuantity(),
 	}
 
-	orderItem, err := testQueries.createOrderItem(context.Background(), arg)
+	orderItem, err := testStore.createOrderItem(context.Background(), arg)
 
 	require.NoError(t, err)
 	require.NotEmpty(t, orderItem)

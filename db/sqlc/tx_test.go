@@ -23,7 +23,7 @@ func createRandomOrderTx(t *testing.T, client Client, rest Restaurant, dishes []
 		DishIDsQty: dishIDsQty,
 	}
 
-	order, err := CreateOrderTx(testDb, context.Background(), arg)
+	order, err := testStore.CreateOrderTx(context.Background(), arg)
 
 	return order, err
 }
@@ -86,7 +86,7 @@ func TestCreateOrderTx(t *testing.T) {
 	}
 
 	for _, dish := range dishes {
-		actualDish, err := testQueries.GetDish(context.Background(), dish.ID)
+		actualDish, err := testStore.GetDish(context.Background(), dish.ID)
 		require.NoError(t, err)
 
 		assert.Equal(t, dish.Quantity-actualAmmounts[dish.ID], actualDish.Quantity)
