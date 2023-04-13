@@ -3,8 +3,6 @@ package api
 import (
 	"net/http"
 
-	db "github.com/lakemanr/otamaq/db/sqlc"
-
 	"github.com/gin-gonic/gin"
 )
 
@@ -21,9 +19,7 @@ func (s *Server) createRestaurant(ctx *gin.Context) {
 		return
 	}
 
-	q := db.New(s.db)
-
-	restaurant, err := q.CreateRestaurant(ctx, req.Name)
+	restaurant, err := s.store.CreateRestaurant(ctx, req.Name)
 
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})

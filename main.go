@@ -5,6 +5,7 @@ import (
 	"log"
 
 	"github.com/lakemanr/otamaq/api"
+	db "github.com/lakemanr/otamaq/db/sqlc"
 	"github.com/lakemanr/otamaq/util"
 	_ "github.com/lib/pq"
 )
@@ -23,6 +24,6 @@ func main() {
 		log.Fatal("Cannot connect to db:", err)
 	}
 
-	s := api.NewServer(conn)
+	s := api.NewServer(db.NewStore(conn))
 	s.Start(congig.ServerAddress)
 }
