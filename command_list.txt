@@ -19,3 +19,7 @@ sqlc generate
 
 //dbveaver
 wget https://dbeaver.io/files/dbeaver-ce_latest_amd64.deb
+
+// mockgen
+go env -w GO111MODULE=on
+mockgen -build_flags=--mod=mod -destination=db/mock/store.go -package=mock github.com/lakemanr/otamaq/db/sqlc Store

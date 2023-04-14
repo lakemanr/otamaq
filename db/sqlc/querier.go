@@ -12,11 +12,11 @@ type Querier interface {
 	AddDishAmount(ctx context.Context, arg AddDishAmountParams) (Dish, error)
 	CreateClient(ctx context.Context, arg CreateClientParams) (Client, error)
 	CreateDish(ctx context.Context, arg CreateDishParams) (Dish, error)
+	CreateOrder(ctx context.Context, arg CreateOrderParams) (Order, error)
+	CreateOrderItem(ctx context.Context, arg CreateOrderItemParams) (OrderItem, error)
 	CreateRestaurant(ctx context.Context, name string) (Restaurant, error)
 	GetDish(ctx context.Context, id int32) (Dish, error)
 	ListRestaurants(ctx context.Context, arg ListRestaurantsParams) ([]Restaurant, error)
-	createOrder(ctx context.Context, arg createOrderParams) (Order, error)
-	createOrderItem(ctx context.Context, arg createOrderItemParams) (OrderItem, error)
 }
 
 var _ Querier = (*Queries)(nil)

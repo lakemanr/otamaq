@@ -10,12 +10,12 @@ import (
 )
 
 func createRandomOrder(t *testing.T, client Client, rest Restaurant) Order {
-	arg := createOrderParams{
+	arg := CreateOrderParams{
 		ClientID: client.ID,
 		RestID:   rest.ID,
 	}
 
-	order, err := testStore.createOrder(context.Background(), arg)
+	order, err := testStore.CreateOrder(context.Background(), arg)
 
 	require.NoError(t, err)
 	require.NotEmpty(t, order)
@@ -30,13 +30,13 @@ func createRandomOrder(t *testing.T, client Client, rest Restaurant) Order {
 }
 
 func createRandomOrderItem(t *testing.T, order Order, dish Dish) OrderItem {
-	arg := createOrderItemParams{
+	arg := CreateOrderItemParams{
 		OrderID:  order.ID,
 		DishID:   dish.ID,
 		Quantity: util.RandomQuantity(),
 	}
 
-	orderItem, err := testStore.createOrderItem(context.Background(), arg)
+	orderItem, err := testStore.CreateOrderItem(context.Background(), arg)
 
 	require.NoError(t, err)
 	require.NotEmpty(t, orderItem)

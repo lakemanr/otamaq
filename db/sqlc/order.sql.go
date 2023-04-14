@@ -9,7 +9,7 @@ import (
 	"context"
 )
 
-const createOrder = `-- name: createOrder :one
+const createOrder = `-- name: CreateOrder :one
 INSERT INTO orders (
     client_id,
     rest_id
@@ -18,12 +18,12 @@ INSERT INTO orders (
 ) RETURNING id, client_id, rest_id, created_at
 `
 
-type createOrderParams struct {
+type CreateOrderParams struct {
 	ClientID int32 `json:"client_id"`
 	RestID   int32 `json:"rest_id"`
 }
 
-func (q *Queries) createOrder(ctx context.Context, arg createOrderParams) (Order, error) {
+func (q *Queries) CreateOrder(ctx context.Context, arg CreateOrderParams) (Order, error) {
 	row := q.db.QueryRowContext(ctx, createOrder, arg.ClientID, arg.RestID)
 	var i Order
 	err := row.Scan(
@@ -35,7 +35,7 @@ func (q *Queries) createOrder(ctx context.Context, arg createOrderParams) (Order
 	return i, err
 }
 
-const createOrderItem = `-- name: createOrderItem :one
+const createOrderItem = `-- name: CreateOrderItem :one
 INSERT INTO order_items (
     order_id,
     dish_id,
@@ -45,13 +45,13 @@ INSERT INTO order_items (
 ) RETURNING id, order_id, dish_id, quantity
 `
 
-type createOrderItemParams struct {
+type CreateOrderItemParams struct {
 	OrderID  int32 `json:"order_id"`
 	DishID   int32 `json:"dish_id"`
 	Quantity int32 `json:"quantity"`
 }
 
-func (q *Queries) createOrderItem(ctx context.Context, arg createOrderItemParams) (OrderItem, error) {
+func (q *Queries) CreateOrderItem(ctx context.Context, arg CreateOrderItemParams) (OrderItem, error) {
 	row := q.db.QueryRowContext(ctx, createOrderItem, arg.OrderID, arg.DishID, arg.Quantity)
 	var i OrderItem
 	err := row.Scan(
