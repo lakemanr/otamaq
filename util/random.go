@@ -61,3 +61,7 @@ func RandomOrderSize() int {
 func RandomNumOrders() int {
 	return 10 + utilRand.Intn(20)
 }
+
+func RandomID() int32 {
+	return randInt32(1, 1000)
+}

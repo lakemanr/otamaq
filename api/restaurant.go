@@ -7,7 +7,7 @@ import (
 )
 
 type createRestaurantRequest struct {
-	Name string `json:"name" binding:"required"`
+	Name string `json:"name" binding:"required,min=2"`
 }
 
 func (s *Server) createRestaurant(ctx *gin.Context) {
