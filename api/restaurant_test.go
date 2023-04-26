@@ -43,7 +43,7 @@ func TestCreateRestaurantApi(t *testing.T) {
 		{
 			name: "InvalidName",
 			body: gin.H{
-				"name": "",
+				"name": "rest$$",
 			},
 			biuildStubs: func(store *mock.MockStore) {
 				store.EXPECT().CreateRestaurant(gomock.Any(), gomock.Any().String()).Times(0)
