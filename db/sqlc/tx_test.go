@@ -30,8 +30,9 @@ func createRandomOrderTx(t *testing.T, client Client, rest Restaurant, dishes []
 
 func TestCreateOrderTx(t *testing.T) {
 
-	client := createRandomClient(t)
-	rest := createRandomRestaurant(t)
+	user := createRandomUser(t)
+	client := createRandomClient(t, user)
+	rest := createRandomRestaurant(t, user)
 
 	orderSize := util.RandomOrderSize()
 	dishes := make([]Dish, orderSize)

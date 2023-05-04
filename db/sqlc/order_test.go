@@ -52,15 +52,17 @@ func createRandomOrderItem(t *testing.T, order Order, dish Dish) OrderItem {
 }
 
 func TestCreateOrder(t *testing.T) {
-	client := createRandomClient(t)
-	rest := createRandomRestaurant(t)
+	user := createRandomUser(t)
+	client := createRandomClient(t, user)
+	rest := createRandomRestaurant(t, user)
 	createRandomOrder(t, client, rest)
 }
 
 func TestCreateOrderItem(t *testing.T) {
-	rest := createRandomRestaurant(t)
+	user := createRandomUser(t)
+	rest := createRandomRestaurant(t, user)
 	dish := createRandomDish(t, rest)
-	client := createRandomClient(t)
+	client := createRandomClient(t, user)
 	order := createRandomOrder(t, client, rest)
 	createRandomOrderItem(t, order, dish)
 }

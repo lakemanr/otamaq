@@ -19,23 +19,30 @@ import (
 
 func TestCreateRestaurantApi(t *testing.T) {
 
-	restaurant := createRandomRestaurant()
+	user := createRandomUser()
+	restaurant := createRandomRestaurant(user)
+
+	arg := db.CreateRestaurantParams{
+		OwnerLogin: restaurant.OwnerLogin,
+		Name:       restaurant.Name,
+	}
 
 	testCases := []struct {
 		name          string
 		body          gin.H
-		biuildStubs   func(store *mock.MockStore)
-		checkResponce func(recorder *httptest.ResponseRecorder)
+		buildStubs    func(store *mock.MockStore)
+		checkResponse func(recorder *httptest.ResponseRecorder)
 	}{
 		{
 			name: "OK",
 			body: gin.H{
-				"name": restaurant.Name,
+				"owner_login": restaurant.OwnerLogin,
+				"name":        restaurant.Name,
 			},
-			biuildStubs: func(store *mock.MockStore) {
-				store.EXPECT().CreateRestaurant(gomock.Any(), gomock.Eq(restaurant.Name)).Times(1).Return(restaurant, nil)
+			buildStubs: func(store *mock.MockStore) {
+				store.EXPECT().CreateRestaurant(gomock.Any(), gomock.Eq(arg)).Times(1).Return(restaurant, nil)
 			},
-			checkResponce: func(recorder *httptest.ResponseRecorder) {
+			checkResponse: func(recorder *httptest.ResponseRecorder) {
 				require.Equal(t, http.StatusOK, recorder.Code)
 				requireBodyMatchRestaurant(t, recorder.Body, restaurant)
 			},
@@ -43,24 +50,26 @@ func TestCreateRestaurantApi(t *testing.T) {
 		{
 			name: "InvalidName",
 			body: gin.H{
-				"name": "rest$$",
+				"owner_login": restaurant.OwnerLogin,
+				"name":        "rest$$",
 			},
-			biuildStubs: func(store *mock.MockStore) {
-				store.EXPECT().CreateRestaurant(gomock.Any(), gomock.Any().String()).Times(0)
+			buildStubs: func(store *mock.MockStore) {
+				store.EXPECT().CreateRestaurant(gomock.Any(), gomock.Any()).Times(0)
 			},
-			checkResponce: func(recorder *httptest.ResponseRecorder) {
+			checkResponse: func(recorder *httptest.ResponseRecorder) {
 				require.Equal(t, http.StatusBadRequest, recorder.Code)
 			},
 		},
 		{
-			name: "InternalvError",
+			name: "InternalError",
 			body: gin.H{
-				"name": restaurant.Name,
+				"owner_login": restaurant.OwnerLogin,
+				"name":        restaurant.Name,
 			},
-			biuildStubs: func(store *mock.MockStore) {
-				store.EXPECT().CreateRestaurant(gomock.Any(), gomock.Eq(restaurant.Name)).Times(1).Return(db.Restaurant{}, sql.ErrConnDone)
+			buildStubs: func(store *mock.MockStore) {
+				store.EXPECT().CreateRestaurant(gomock.Any(), gomock.Eq(arg)).Times(1).Return(db.Restaurant{}, sql.ErrConnDone)
 			},
-			checkResponce: func(recorder *httptest.ResponseRecorder) {
+			checkResponse: func(recorder *httptest.ResponseRecorder) {
 				require.Equal(t, http.StatusInternalServerError, recorder.Code)
 			},
 		},
@@ -79,26 +88,28 @@ func TestCreateRestaurantApi(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			body, err := json.Marshal(tc.body)
 			require.NoError(t, err)
-			tc.biuildStubs(store)
+			tc.buildStubs(store)
 			request := httptest.NewRequest("POST", "/restaurants", bytes.NewReader(body))
 			recorder := httptest.NewRecorder()
 			server.router.ServeHTTP(recorder, request)
-			tc.checkResponce(recorder)
+			tc.checkResponse(recorder)
 		})
 	}
 }
 
-func createRandomRestaurant() db.Restaurant {
+func createRandomRestaurant(user db.User) db.Restaurant {
+
 	return db.Restaurant{
-		ID:        util.RandomID(),
-		Name:      util.RandomRestaurantName(),
-		CreatedAt: time.Now().Truncate(time.Second),
+		ID:         util.RandomID(),
+		OwnerLogin: user.Login,
+		Name:       util.RandomRestaurantName(),
+		CreatedAt:  time.Now().Truncate(time.Second),
 	}
 }
 
-func requireBodyMatchRestaurant(t *testing.T, responceBody *bytes.Buffer, expectedRestaurant db.Restaurant) {
-	var responceRestaurant db.Restaurant
-	err := json.Unmarshal(responceBody.Bytes(), &responceRestaurant)
+func requireBodyMatchRestaurant(t *testing.T, responseBody *bytes.Buffer, expectedRestaurant db.Restaurant) {
+	var responseRestaurant db.Restaurant
+	err := json.Unmarshal(responseBody.Bytes(), &responseRestaurant)
 	require.NoError(t, err)
-	require.Equal(t, responceRestaurant, expectedRestaurant)
+	require.Equal(t, responseRestaurant, expectedRestaurant)
 }

@@ -16,14 +16,14 @@ func init() {
 
 const alphabet = "абвгдеёжзийклмнопрстуфхцчшщъыьэюя"
 
-func randStirng(leanght int) string {
+func randString(length int) string {
 
 	runes := []rune(alphabet)
 
 	var st strings.Builder
 
-	for i := 0; i < leanght; i++ {
-		st.WriteRune(runes[utilRand.Intn(leanght)])
+	for i := 0; i < length; i++ {
+		st.WriteRune(runes[utilRand.Intn(length)])
 	}
 
 	return st.String()
@@ -35,19 +35,23 @@ func randInt32(min, max int32) int32 {
 }
 
 func RandomRestaurantName() string {
-	return "restaurant " + randStirng(10)
+	return "restaurant " + randString(10)
 }
 
 func RandomDishName() string {
-	return "dish " + randStirng(10)
+	return "dish " + randString(10)
 }
 
-func RandomClientName() string {
-	return "client full name " + randStirng(10)
+func RandomUserName() string {
+	return "client full name " + randString(10)
 }
 
-func RandomClientLogin() string {
-	return "client login " + randStirng(10)
+func RandomUserLogin() string {
+	return "user_login_" + randString(10)
+}
+
+func RandomPassword() string {
+	return "password " + randString(10)
 }
 
 func RandomQuantity() int32 {

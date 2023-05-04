@@ -11,21 +11,32 @@ import (
 
 const createRestaurant = `-- name: CreateRestaurant :one
 INSERT INTO restaurants (
+    owner_login,
     name
 ) VALUES (
-    $1
-) RETURNING id, name, created_at
+    $1, $2
+) RETURNING id, owner_login, name, created_at
 `
 
-func (q *Queries) CreateRestaurant(ctx context.Context, name string) (Restaurant, error) {
-	row := q.db.QueryRowContext(ctx, createRestaurant, name)
+type CreateRestaurantParams struct {
+	OwnerLogin string `json:"owner_login"`
+	Name       string `json:"name"`
+}
+
+func (q *Queries) CreateRestaurant(ctx context.Context, arg CreateRestaurantParams) (Restaurant, error) {
+	row := q.db.QueryRowContext(ctx, createRestaurant, arg.OwnerLogin, arg.Name)
 	var i Restaurant
-	err := row.Scan(&i.ID, &i.Name, &i.CreatedAt)
+	err := row.Scan(
+		&i.ID,
+		&i.OwnerLogin,
+		&i.Name,
+		&i.CreatedAt,
+	)
 	return i, err
 }
 
 const listRestaurants = `-- name: ListRestaurants :many
-SELECT id, name, created_at FROM restaurants
+SELECT id, owner_login, name, created_at FROM restaurants
 ORDER BY id
 LIMIT $1
 OFFSET $2
@@ -45,7 +56,12 @@ func (q *Queries) ListRestaurants(ctx context.Context, arg ListRestaurantsParams
 	var items []Restaurant
 	for rows.Next() {
 		var i Restaurant
-		if err := rows.Scan(&i.ID, &i.Name, &i.CreatedAt); err != nil {
+		if err := rows.Scan(
+			&i.ID,
+			&i.OwnerLogin,
+			&i.Name,
+			&i.CreatedAt,
+		); err != nil {
 			return nil, err
 		}
 		items = append(items, i)

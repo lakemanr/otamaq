@@ -10,11 +10,12 @@ import (
 
 type Querier interface {
 	AddDishAmount(ctx context.Context, arg AddDishAmountParams) (Dish, error)
-	CreateClient(ctx context.Context, arg CreateClientParams) (Client, error)
+	CreateClient(ctx context.Context, ownerLogin string) (Client, error)
 	CreateDish(ctx context.Context, arg CreateDishParams) (Dish, error)
 	CreateOrder(ctx context.Context, arg CreateOrderParams) (Order, error)
 	CreateOrderItem(ctx context.Context, arg CreateOrderItemParams) (OrderItem, error)
-	CreateRestaurant(ctx context.Context, name string) (Restaurant, error)
+	CreateRestaurant(ctx context.Context, arg CreateRestaurantParams) (Restaurant, error)
+	CreateUser(ctx context.Context, arg CreateUserParams) (User, error)
 	GetDish(ctx context.Context, id int32) (Dish, error)
 	ListRestaurants(ctx context.Context, arg ListRestaurantsParams) ([]Restaurant, error)
 }

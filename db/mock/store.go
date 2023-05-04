@@ -51,7 +51,7 @@ func (mr *MockStoreMockRecorder) AddDishAmount(arg0, arg1 interface{}) *gomock.C
 }
 
 // CreateClient mocks base method.
-func (m *MockStore) CreateClient(arg0 context.Context, arg1 db.CreateClientParams) (db.Client, error) {
+func (m *MockStore) CreateClient(arg0 context.Context, arg1 string) (db.Client, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "CreateClient", arg0, arg1)
 	ret0, _ := ret[0].(db.Client)
@@ -126,7 +126,7 @@ func (mr *MockStoreMockRecorder) CreateOrderTx(arg0, arg1 interface{}) *gomock.C
 }
 
 // CreateRestaurant mocks base method.
-func (m *MockStore) CreateRestaurant(arg0 context.Context, arg1 string) (db.Restaurant, error) {
+func (m *MockStore) CreateRestaurant(arg0 context.Context, arg1 db.CreateRestaurantParams) (db.Restaurant, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "CreateRestaurant", arg0, arg1)
 	ret0, _ := ret[0].(db.Restaurant)
@@ -138,6 +138,21 @@ func (m *MockStore) CreateRestaurant(arg0 context.Context, arg1 string) (db.Rest
 func (mr *MockStoreMockRecorder) CreateRestaurant(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateRestaurant", reflect.TypeOf((*MockStore)(nil).CreateRestaurant), arg0, arg1)
+}
+
+// CreateUser mocks base method.
+func (m *MockStore) CreateUser(arg0 context.Context, arg1 db.CreateUserParams) (db.User, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CreateUser", arg0, arg1)
+	ret0, _ := ret[0].(db.User)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// CreateUser indicates an expected call of CreateUser.
+func (mr *MockStoreMockRecorder) CreateUser(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateUser", reflect.TypeOf((*MockStore)(nil).CreateUser), arg0, arg1)
 }
 
 // GetDish mocks base method.

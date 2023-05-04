@@ -4,10 +4,12 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	db "github.com/lakemanr/otamaq/db/sqlc"
 )
 
 type createRestaurantRequest struct {
-	Name string `json:"name" binding:"required,min=2,validName"`
+	OwnerLogin string `json:"owner_login" binding:"required,min=2,validLogin"`
+	Name       string `json:"name" binding:"required,min=2,validName"`
 }
 
 func (s *Server) createRestaurant(ctx *gin.Context) {
@@ -19,7 +21,11 @@ func (s *Server) createRestaurant(ctx *gin.Context) {
 		return
 	}
 
-	restaurant, err := s.store.CreateRestaurant(ctx, req.Name)
+	arg := db.CreateRestaurantParams{
+		OwnerLogin: req.OwnerLogin,
+		Name:       req.Name,
+	}
+	restaurant, err := s.store.CreateRestaurant(ctx, arg)
 
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})

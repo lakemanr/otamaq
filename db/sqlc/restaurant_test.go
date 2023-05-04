@@ -9,13 +9,18 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func createRandomRestaurant(t *testing.T) Restaurant {
-	arg := util.RandomRestaurantName()
+func createRandomRestaurant(t *testing.T, user User) Restaurant {
+	arg := CreateRestaurantParams{
+		OwnerLogin: user.Login,
+		Name:       util.RandomRestaurantName(),
+	}
+
 	rest, err := testStore.CreateRestaurant(context.Background(), arg)
 
 	require.NoError(t, err)
 	require.NotEmpty(t, rest)
-	assert.Equal(t, rest.Name, arg)
+	assert.Equal(t, rest.Name, arg.Name)
+	assert.Equal(t, rest.OwnerLogin, arg.OwnerLogin)
 	assert.NotZero(t, rest.ID)
 	assert.NotZero(t, rest.CreatedAt)
 
@@ -23,5 +28,6 @@ func createRandomRestaurant(t *testing.T) Restaurant {
 }
 
 func TestCreateRestaurant(t *testing.T) {
-	createRandomRestaurant(t)
+	user := createRandomUser(t)
+	createRandomRestaurant(t, user)
 }

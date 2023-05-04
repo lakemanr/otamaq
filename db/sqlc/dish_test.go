@@ -58,12 +58,14 @@ func makeUnlimitedDishAmount(t *testing.T, dishBefore Dish) Dish {
 }
 
 func TestCreateDish(t *testing.T) {
-	rest := createRandomRestaurant(t)
+	user := createRandomUser(t)
+	rest := createRandomRestaurant(t, user)
 	createRandomDish(t, rest)
 }
 
-func TestAddDishAmmount(t *testing.T) {
-	rest := createRandomRestaurant(t)
+func TestAddDishAmount(t *testing.T) {
+	user := createRandomUser(t)
+	rest := createRandomRestaurant(t, user)
 	dishBefore := createRandomDish(t, rest)
 	dish := addRandomDishAmount(t, dishBefore, util.RandomQuantity())
 
@@ -80,7 +82,8 @@ func TestAddDishAmmount(t *testing.T) {
 }
 
 func TestGetDish(t *testing.T) {
-	rest := createRandomRestaurant(t)
+	user := createRandomUser(t)
+	rest := createRandomRestaurant(t, user)
 	dishBefore := createRandomDish(t, rest)
 
 	dish, err := testStore.GetDish(context.Background(), dishBefore.ID)

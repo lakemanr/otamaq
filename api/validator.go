@@ -18,3 +18,16 @@ var validName validator.Func = func(fieldLevel validator.FieldLevel) bool {
 	}
 	return false
 }
+
+var validLogin validator.Func = func(fieldLevel validator.FieldLevel) bool {
+	if login, ok := fieldLevel.Field().Interface().(string); ok {
+		for _, r := range login {
+			isValid := unicode.IsLetter(r) || unicode.IsDigit(r) || r == '_'
+			if !isValid {
+				return false
+			}
+		}
+		return true
+	}
+	return false
+}
