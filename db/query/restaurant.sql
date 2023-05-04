@@ -1,8 +1,9 @@
 -- name: CreateRestaurant :one
 INSERT INTO restaurants (
+    owner_login,
     name
 ) VALUES (
-    $1
+    $1, $2
 ) RETURNING *;
 
 -- name: ListRestaurants :many

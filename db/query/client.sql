@@ -1,7 +1,6 @@
 -- name: CreateClient :one
 INSERT INTO clients (
-    full_name,
-    login
+    owner_login
 ) VALUES (
-    $1, $2
+    $1
 ) RETURNING *;
