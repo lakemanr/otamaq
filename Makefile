@@ -13,6 +13,9 @@ dropdb:
 migrateup:
 	migrate -path db/migration -database "postgres://root:secret@localhost:5432/otamaq?sslmode=disable" -verbose up
 
+migratedown:
+	migrate -path db/migration -database "postgres://root:secret@localhost:5432/otamaq?sslmode=disable" -verbose down
+
 migrateup1:
 	migrate -path db/migration -database "postgres://root:secret@localhost:5432/otamaq?sslmode=disable" -verbose up 1
 
