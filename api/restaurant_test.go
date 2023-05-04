@@ -103,7 +103,7 @@ func createRandomRestaurant(user db.User) db.Restaurant {
 		ID:         util.RandomID(),
 		OwnerLogin: user.Login,
 		Name:       util.RandomRestaurantName(),
-		CreatedAt:  time.Now().Truncate(time.Second),
+		CreatedAt:  time.Now().Truncate(time.Second).Local(),
 	}
 }
 
