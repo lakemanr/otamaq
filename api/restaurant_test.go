@@ -19,12 +19,11 @@ import (
 
 func TestCreateRestaurantApi(t *testing.T) {
 
-	user := createRandomUser()
-	restaurant := createRandomRestaurant(user)
+	restaurant := createRandomRestaurant()
 
 	arg := db.CreateRestaurantParams{
-		OwnerLogin: restaurant.OwnerLogin,
-		Name:       restaurant.Name,
+		OwnerID: restaurant.OwnerID,
+		Name:    restaurant.Name,
 	}
 
 	testCases := []struct {
@@ -36,8 +35,8 @@ func TestCreateRestaurantApi(t *testing.T) {
 		{
 			name: "OK",
 			body: gin.H{
-				"owner_login": restaurant.OwnerLogin,
-				"name":        restaurant.Name,
+				"owner_id": restaurant.OwnerID,
+				"name":     restaurant.Name,
 			},
 			buildStubs: func(store *mock.MockStore) {
 				store.EXPECT().CreateRestaurant(gomock.Any(), gomock.Eq(arg)).Times(1).Return(restaurant, nil)
@@ -50,8 +49,8 @@ func TestCreateRestaurantApi(t *testing.T) {
 		{
 			name: "InvalidName",
 			body: gin.H{
-				"owner_login": restaurant.OwnerLogin,
-				"name":        "rest$$",
+				"owner_id": restaurant.OwnerID,
+				"name":     "rest$$",
 			},
 			buildStubs: func(store *mock.MockStore) {
 				store.EXPECT().CreateRestaurant(gomock.Any(), gomock.Any()).Times(0)
@@ -63,8 +62,8 @@ func TestCreateRestaurantApi(t *testing.T) {
 		{
 			name: "InternalError",
 			body: gin.H{
-				"owner_login": restaurant.OwnerLogin,
-				"name":        restaurant.Name,
+				"owner_id": restaurant.OwnerID,
+				"name":     restaurant.Name,
 			},
 			buildStubs: func(store *mock.MockStore) {
 				store.EXPECT().CreateRestaurant(gomock.Any(), gomock.Eq(arg)).Times(1).Return(db.Restaurant{}, sql.ErrConnDone)
@@ -97,13 +96,13 @@ func TestCreateRestaurantApi(t *testing.T) {
 	}
 }
 
-func createRandomRestaurant(user db.User) db.Restaurant {
+func createRandomRestaurant() db.Restaurant {
 
 	return db.Restaurant{
-		ID:         util.RandomID(),
-		OwnerLogin: user.Login,
-		Name:       util.RandomRestaurantName(),
-		CreatedAt:  time.Now().Truncate(time.Second).Local(),
+		ID:        util.RandomID(),
+		OwnerID:   util.RandomID(),
+		Name:      util.RandomRestaurantName(),
+		CreatedAt: time.Now().Truncate(time.Second).Local(),
 	}
 }
 

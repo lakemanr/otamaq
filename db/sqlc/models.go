@@ -56,9 +56,9 @@ func (ns NullDishEtag) Value() (driver.Value, error) {
 }
 
 type Client struct {
-	ID         int32     `json:"id"`
-	OwnerLogin string    `json:"owner_login"`
-	CreatedAt  time.Time `json:"created_at"`
+	ID        int32     `json:"id"`
+	OwnerID   int32     `json:"owner_id"`
+	CreatedAt time.Time `json:"created_at"`
 }
 
 type Dish struct {
@@ -90,13 +90,14 @@ type OrderItem struct {
 }
 
 type Restaurant struct {
-	ID         int32     `json:"id"`
-	OwnerLogin string    `json:"owner_login"`
-	Name       string    `json:"name"`
-	CreatedAt  time.Time `json:"created_at"`
+	ID        int32     `json:"id"`
+	OwnerID   int32     `json:"owner_id"`
+	Name      string    `json:"name"`
+	CreatedAt time.Time `json:"created_at"`
 }
 
 type User struct {
+	ID              int32     `json:"id"`
 	Login           string    `json:"login"`
 	FullName        string    `json:"full_name"`
 	HashedPasswords string    `json:"hashed_passwords"`

@@ -11,8 +11,8 @@ import (
 
 func createRandomRestaurant(t *testing.T, user User) Restaurant {
 	arg := CreateRestaurantParams{
-		OwnerLogin: user.Login,
-		Name:       util.RandomRestaurantName(),
+		OwnerID: user.ID,
+		Name:    util.RandomRestaurantName(),
 	}
 
 	rest, err := testStore.CreateRestaurant(context.Background(), arg)
@@ -20,7 +20,7 @@ func createRandomRestaurant(t *testing.T, user User) Restaurant {
 	require.NoError(t, err)
 	require.NotEmpty(t, rest)
 	assert.Equal(t, rest.Name, arg.Name)
-	assert.Equal(t, rest.OwnerLogin, arg.OwnerLogin)
+	assert.Equal(t, rest.OwnerID, arg.OwnerID)
 	assert.NotZero(t, rest.ID)
 	assert.NotZero(t, rest.CreatedAt)
 

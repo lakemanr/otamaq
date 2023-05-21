@@ -16,7 +16,7 @@ INSERT INTO users (
     hashed_passwords
 ) VALUES (
     $1, $2, $3
-) RETURNING login, full_name, hashed_passwords, created_at
+) RETURNING id, login, full_name, hashed_passwords, created_at
 `
 
 type CreateUserParams struct {
@@ -29,6 +29,7 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, e
 	row := q.db.QueryRowContext(ctx, createUser, arg.Login, arg.FullName, arg.HashedPasswords)
 	var i User
 	err := row.Scan(
+		&i.ID,
 		&i.Login,
 		&i.FullName,
 		&i.HashedPasswords,

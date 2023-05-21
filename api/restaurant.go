@@ -8,8 +8,8 @@ import (
 )
 
 type createRestaurantRequest struct {
-	OwnerLogin string `json:"owner_login" binding:"required,min=2,validLogin"`
-	Name       string `json:"name" binding:"required,min=2,validName"`
+	OwnerID int32  `json:"owner_id" binding:"required"`
+	Name    string `json:"name" binding:"required,min=2,validName"`
 }
 
 func (s *Server) createRestaurant(ctx *gin.Context) {
@@ -22,8 +22,8 @@ func (s *Server) createRestaurant(ctx *gin.Context) {
 	}
 
 	arg := db.CreateRestaurantParams{
-		OwnerLogin: req.OwnerLogin,
-		Name:       req.Name,
+		OwnerID: req.OwnerID,
+		Name:    req.Name,
 	}
 	restaurant, err := s.store.CreateRestaurant(ctx, arg)
 

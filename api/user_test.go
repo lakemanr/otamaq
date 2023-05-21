@@ -12,6 +12,7 @@ func createRandomUser() db.User {
 	password := util.RandomPassword()
 
 	return db.User{
+		ID:              util.RandomID(),
 		Login:           util.RandomUserLogin(),
 		FullName:        util.RandomUserName(),
 		HashedPasswords: util.HashPassword(password),

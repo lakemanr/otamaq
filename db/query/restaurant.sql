@@ -1,6 +1,6 @@
 -- name: CreateRestaurant :one
 INSERT INTO restaurants (
-    owner_login,
+    owner_id,
     name
 ) VALUES (
     $1, $2

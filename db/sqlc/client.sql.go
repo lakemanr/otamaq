@@ -11,15 +11,15 @@ import (
 
 const createClient = `-- name: CreateClient :one
 INSERT INTO clients (
-    owner_login
+    owner_id
 ) VALUES (
     $1
-) RETURNING id, owner_login, created_at
+) RETURNING id, owner_id, created_at
 `
 
-func (q *Queries) CreateClient(ctx context.Context, ownerLogin string) (Client, error) {
-	row := q.db.QueryRowContext(ctx, createClient, ownerLogin)
+func (q *Queries) CreateClient(ctx context.Context, ownerID int32) (Client, error) {
+	row := q.db.QueryRowContext(ctx, createClient, ownerID)
 	var i Client
-	err := row.Scan(&i.ID, &i.OwnerLogin, &i.CreatedAt)
+	err := row.Scan(&i.ID, &i.OwnerID, &i.CreatedAt)
 	return i, err
 }

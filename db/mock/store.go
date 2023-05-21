@@ -51,7 +51,7 @@ func (mr *MockStoreMockRecorder) AddDishAmount(arg0, arg1 interface{}) *gomock.C
 }
 
 // CreateClient mocks base method.
-func (m *MockStore) CreateClient(arg0 context.Context, arg1 string) (db.Client, error) {
+func (m *MockStore) CreateClient(arg0 context.Context, arg1 int32) (db.Client, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "CreateClient", arg0, arg1)
 	ret0, _ := ret[0].(db.Client)

@@ -10,7 +10,7 @@ import (
 
 type Querier interface {
 	AddDishAmount(ctx context.Context, arg AddDishAmountParams) (Dish, error)
-	CreateClient(ctx context.Context, ownerLogin string) (Client, error)
+	CreateClient(ctx context.Context, ownerID int32) (Client, error)
 	CreateDish(ctx context.Context, arg CreateDishParams) (Dish, error)
 	CreateOrder(ctx context.Context, arg CreateOrderParams) (Order, error)
 	CreateOrderItem(ctx context.Context, arg CreateOrderItemParams) (OrderItem, error)
