@@ -15,7 +15,7 @@ func createRandomUser() db.User {
 		ID:              util.RandomID(),
 		Login:           util.RandomUserLogin(),
 		FullName:        util.RandomUserName(),
-		HashedPasswords: util.HashPassword(password),
+		HashedPasswords: password,
 		CreatedAt:       time.Now().Truncate(time.Second).Local(),
 	}
 }

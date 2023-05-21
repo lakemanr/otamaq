@@ -23,6 +23,7 @@ func NewServer(store db.Store) *Server {
 		v.RegisterValidation("validLogin", validLogin)
 	}
 
+	s.router.POST("/users", s.createUser)
 	s.router.POST("/restaurants", s.createRestaurant)
 
 	return s

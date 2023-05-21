@@ -12,18 +12,18 @@ import (
 
 func main() {
 
-	congig, err := util.LoadConfig(".")
+	config, err := util.LoadConfig(".")
 
 	if err != nil {
 		log.Fatal("Cannot load config:", err)
 	}
 
-	conn, err := sql.Open(congig.DbDriver, congig.DbSource)
+	conn, err := sql.Open(config.DbDriver, config.DbSource)
 
 	if err != nil {
 		log.Fatal("Cannot connect to db:", err)
 	}
 
 	s := api.NewServer(db.NewStore(conn))
-	s.Start(congig.ServerAddress)
+	s.Start(config.ServerAddress)
 }
