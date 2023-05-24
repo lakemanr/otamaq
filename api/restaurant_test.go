@@ -102,7 +102,7 @@ func createRandomRestaurant() db.Restaurant {
 		ID:        util.RandomID(),
 		OwnerID:   util.RandomID(),
 		Name:      util.RandomRestaurantName(),
-		CreatedAt: time.Now().Truncate(time.Second).Local(),
+		CreatedAt: time.Now(),
 	}
 }
 
@@ -110,5 +110,8 @@ func requireBodyMatchRestaurant(t *testing.T, responseBody *bytes.Buffer, expect
 	var responseRestaurant db.Restaurant
 	err := json.Unmarshal(responseBody.Bytes(), &responseRestaurant)
 	require.NoError(t, err)
-	require.Equal(t, responseRestaurant, expectedRestaurant)
+	require.Equal(t, responseRestaurant.ID, expectedRestaurant.ID)
+	require.Equal(t, responseRestaurant.OwnerID, expectedRestaurant.OwnerID)
+	require.Equal(t, responseRestaurant.Name, expectedRestaurant.Name)
+	require.True(t, responseRestaurant.CreatedAt.Equal(expectedRestaurant.CreatedAt))
 }
